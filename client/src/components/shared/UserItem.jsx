@@ -1,4 +1,4 @@
-import { IconButton, ListItem, Stack, Typography } from "@mui/material";
+import { IconButton, ListItem, Stack, Typography, Avatar } from "@mui/material";
 import React, { memo } from "react";
 import { Add as AddIcon } from "@mui/icons-material";
 
@@ -9,9 +9,27 @@ const UserItem = ({ user, handler, handlerIsLoading }) => {
       <Stack direction={'row'} alignItems={'center'} spacing={'1rem'} width={"100%"}>
         <Avatar />
 
-        <Typography>{name}</Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            flexGlow: 1,
+            width : "100%"
+          }}
+        >
+          {name}
+        </Typography>
 
-        <IconButton onClick={() => handler(_id)} disabled={handlerIsLoading}>
+        <IconButton 
+        onClick={() => handler(_id)} 
+        disabled={handlerIsLoading}
+        size="small"
+        sx={{
+          bgcolor : 'primary.main',
+          color : 'white',
+          "&:hover" : {
+            bgcolor : 'primary.dark'
+          }
+        }}>
           <AddIcon />
         </IconButton>
       </Stack>
