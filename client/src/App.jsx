@@ -10,7 +10,7 @@ const Groups = lazy(() => import("./pages/Groups"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 
-let user = true;
+let user = false;
 
 const App = () => {
   return (
