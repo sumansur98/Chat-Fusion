@@ -28,7 +28,7 @@ const ChatList = ({
           onlineUsers.includes(_id)
         );
         return (
-          <div>
+          
             <ChatItem
               newMessageAlert={newMsgAlert}
               isOnline={isOnline}
@@ -38,10 +38,10 @@ const ChatList = ({
               key={_id}
               groupChat={groupChat}
               sameSender={chatId === _id}
-              handleDeleteChatOpen={handleDeleteChat}
+              handleDeleteChat={handleDeleteChat}
               index={index}
             />
-          </div>
+          
         );
       })}
     </Stack>
