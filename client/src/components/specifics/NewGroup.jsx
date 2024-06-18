@@ -5,15 +5,21 @@ import UserItem from '../shared/UserItem';
 
 
 const NewGroup = () => {
+  const [groupName, setGroupName] = useState("")
+  const [members, setMembers] = useState(sampleUsers);
+  const [selectedMembers, setSelectedMembers] = useState([])
 
-  const selectMemberHandler = () => {
+  console.log(selectedMembers);
 
+  const selectMemberHandler = (id) => {
+    setSelectedMembers(prev => {
+      return prev.includes(id) ? prev.filter(curr => curr!==id) : [...prev, id]
+    })
   }
   const submitHandler = () => {
 
   }
 
-  const [groupName, setGroupName] = useState("")
 
   return (
     <Dialog open>
@@ -23,9 +29,10 @@ const NewGroup = () => {
         <Typography variant='body1'>Members</Typography>
         <Stack>
           {
-            sampleUsers.map(user => (
+            members.map(user => (
               <UserItem user={user} key={user._id}
                 handler={selectMemberHandler}
+                isAdded={selectedMembers.includes(user._id)}
               />
             ))
           }
