@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import React, { memo } from 'react';
 import moment from "moment";
+import { fileFormat } from '../../lib/features';
+import RenderAttachment from './RenderAttachment';
 
 const MessageComponent = ({ message, user }) => {
 
@@ -48,17 +50,17 @@ const MessageComponent = ({ message, user }) => {
                 attachments.length>0 && (
                     attachments.map((i, index) => {
                         const url = i.url;
-                        const file = 'asd';
+                        const file = fileFormat(url);
                         return (
                             <Box key={index}>
                                 <a 
-                                href=""
+                                href={url}
                                 target='_blank'
                                 download
                                 style={{
                                     color:'black'
                                 }}>
-                                    
+                                    {RenderAttachment(file, url)}
                                 </a>
                             </Box>
                         )

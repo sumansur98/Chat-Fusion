@@ -88,7 +88,7 @@ export const sampleMsgs = [{
     },
   ],
   content: "L*uda ka Message hai",
-  _id: "sfnsdjkfsdnfkjsbnd",
+  _id: "sfnsdjkfsdnfkjsbndasdf",
   sender: {
     _id: "asdfasdfsadf",
     name: "Chaman"
