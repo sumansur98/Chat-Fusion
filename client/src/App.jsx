@@ -11,6 +11,9 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 const AdminLogin = lazy(()=>import("./pages/admin/AdminLogin"))
 const Dashboard = lazy(()=>import("./pages/admin/Dashboard"))
+const UserManagement = lazy(()=>import("./pages/admin/UserManagement"))
+const ChatManagement = lazy(()=>import("./pages/admin/ChatManagement"))
+const MessageManagement = lazy(()=>import("./pages/admin/MessageManagement"))
 
 
 let user = true;
@@ -34,6 +37,9 @@ const App = () => {
 
           <Route path="/admin" element={<AdminLogin/>}></Route>
           <Route path="/admin/dashboard" element={<Dashboard/>}></Route>
+          <Route path="/admin/users" element={<UserManagement/>}></Route>
+          <Route path="/admin/chats" element={<ChatManagement/>}></Route>
+          <Route path="/admin/messages" element={<MessageManagement/>}></Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>
