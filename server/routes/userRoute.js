@@ -1,8 +1,10 @@
 import express from "express";
-import { login } from "../controllers/userController.js";
+import { login, newUser } from "../controllers/userController.js";
+import { singleAvatar } from "../middlewares/multer.js";
 
 const router = express.Router();
 
-router.get('/login', login)
+router.post('/new', singleAvatar, newUser)
+router.post('/login', login)
 
 export default router;
