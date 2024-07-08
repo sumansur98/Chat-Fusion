@@ -18,10 +18,11 @@ const connectDB = (uri) => {
 }
 
 const sendToken = (res, user, code, message) => {
-    console.log('user', user);
+    //console.log('user', user);
     const token = jwt.sign({_id : user._id}, process.env.JWT_SECRET);
 
     return res.status(code).cookie("chat-token", token, cookieOptions).json({success : true, message})
 }
 
-export {connectDB, sendToken}
+
+export {connectDB, sendToken, cookieOptions}

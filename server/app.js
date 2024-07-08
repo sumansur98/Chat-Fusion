@@ -3,6 +3,7 @@ import userRouter from './routes/userRoute.js'
 import { connectDB } from "./utils/features.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { errorMiddleware } from "./middlewares/error.js";
 
 dotenv.config({path : './.env'})
 
@@ -22,6 +23,8 @@ app.use('/user', userRouter);
 app.get('/', (req, res) => {
     res.send('hello')
 })
+
+app.use(errorMiddleware)
 
 app.listen(port, ()=>{
     console.log('server listening port ' + port)
