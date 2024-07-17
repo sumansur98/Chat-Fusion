@@ -24,5 +24,9 @@ const sendToken = (res, user, code, message) => {
     return res.status(code).cookie("chat-token", token, cookieOptions).json({success : true, message})
 }
 
+const emitEvent = (req, event, users, data) => {
+    console.log('emitting event', event);
+}
 
-export {connectDB, sendToken, cookieOptions}
+
+export {connectDB, sendToken, cookieOptions, emitEvent}

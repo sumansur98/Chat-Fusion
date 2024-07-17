@@ -3,7 +3,7 @@ import { ErrorHandler } from "../utils/utility.js";
 
 
 const isAuthenticated = (req, res, next) => {
-    console.log('cookies',req.cookies);
+    //console.log('cookies',req.cookies);
 
     const token = req.cookies['chat-token'];
 
@@ -11,7 +11,7 @@ const isAuthenticated = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log('decoded token', decoded);
+    //console.log('decoded token', decoded);
 
     req.user_id = decoded._id;
 

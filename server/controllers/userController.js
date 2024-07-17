@@ -60,4 +60,11 @@ const logout = (req, res, next) => {
     })
 }
 
-export { login, newUser, getMyProfile, logout };
+const searchUser = (req, res, next) => {
+    return res.status(200).cookie('chat-token', "",{...cookieOptions, maxAge : 0}).json({
+        success : true,
+        message : 'Logged out successfully'
+    })
+}
+
+export { login, newUser, getMyProfile, logout, searchUser };

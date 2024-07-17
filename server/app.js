@@ -1,5 +1,6 @@
 import express from "express";
 import userRouter from './routes/userRoute.js'
+import chatRoute from "./routes/chatRoute.js";
 import { connectDB } from "./utils/features.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -19,6 +20,7 @@ app.use(cookieParser())
 
 
 app.use('/user', userRouter);
+app.use('/chat', chatRoute)
 
 app.get('/', (req, res) => {
     res.send('hello')
