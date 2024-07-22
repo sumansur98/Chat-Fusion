@@ -147,7 +147,38 @@ const removeMember = async(req, res, next) => {
 }
 
 const leaveGroup = async(req, res, next) => {
+    const chatId = req.params.id.toString();
 
+
+    const chat = await Chat.findById(chatId);
+    if(!chat) return next(new ErrorHandler('Chat not found', 404));
+    if(!chat.groupChat) return next(new ErrorHandler('Chat is not groupchat', 400));
+
+    const remainingMembers = chat.members.filter((member) => member.toString() !== req.user_id.toString());
+
+    if(chat.creator.toString() === req.user_id.toString()){
+        const newCreator = remainingMembers[0];
+        chat.creator = newCreator;
+    }
+
+    chat.members = remainingMembers
+
+    await chat.save();
+
+    const user = User.findById(req.user_id, "name");
+    emitEvent(
+        req,
+        'ALERT',
+        chat.members,
+        `${user.name} has left the group`
+    )
+
+    
+
+    res.status(200).json({
+        success : true,
+        message : 'Group Left successfully'
+    })
 }
 
 export {newGroupChat, getMyChat, getMyGroups, addMembers, removeMember, leaveGroup}
