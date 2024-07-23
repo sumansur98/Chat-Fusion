@@ -26,4 +26,4 @@ const msgSchema = new Schema({
     timestamps: true
 })
 
-export const Message = mongoose.models.Message || model('Message', userSchema)
+export const Message = mongoose.models.Message || model('Message', msgSchema)
