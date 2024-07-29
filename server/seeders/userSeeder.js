@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { User } from "../models/userModel.js";
+import { Chat } from "../models/chatModel.js";
 
 const createUser = async (numUsers) => {
   try {
@@ -27,5 +28,6 @@ const createUser = async (numUsers) => {
     process.exit(1);
   }
 };
+
 
 export { createUser };
