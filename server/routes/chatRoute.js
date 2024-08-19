@@ -2,6 +2,7 @@ import express from "express";
 import { isAuthenticated } from "../middlewares/auth.js";
 import { addMembers, deleteChat, getChatDetails, getMessages, getMyChat, getMyGroups, leaveGroup, newGroupChat, removeMember, renameGroup, sendAttachments } from "../controllers/chatController.js";
 import { attachmentsMulter } from "../middlewares/multer.js";
+import { newGroupValidator, validateHandler } from "../lib/validators.js";
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ const router = express.Router();
 //routes which require logged in user
 
 router.use(isAuthenticated);
-router.post('/new', newGroupChat)
+router.post('/new',newGroupValidator(), validateHandler, newGroupChat)
 router.get('/my', getMyChat)
 router.get('/my/groups', getMyGroups)
 router.put('/addmembers', addMembers);

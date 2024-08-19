@@ -14,11 +14,6 @@ import { ErrorHandler } from "../utils/utility.js";
 const newGroupChat = async (req, res, next) => {
   const { name, members } = req.body;
 
-  if (members.length < 2)
-    return next(
-      new ErrorHandler("Group chat must have at least 3 members", 400)
-    );
-
   const allMembers = [...members, req.user_id];
 
   await Chat.create({

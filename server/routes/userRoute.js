@@ -2,11 +2,12 @@ import express from "express";
 import { login, newUser, getMyProfile, logout, searchUser } from "../controllers/userController.js";
 import { singleAvatar } from "../middlewares/multer.js";
 import { isAuthenticated } from "../middlewares/auth.js";
+import { loginValidator, registerValidator, validateHandler } from "../lib/validators.js";
 
 const router = express.Router();
 
-router.post('/new', singleAvatar, newUser)
-router.post('/login', login)
+router.post('/new', singleAvatar, registerValidator(), validateHandler, newUser)
+router.post('/login',loginValidator(),validateHandler,  login)
 
 //routes which require logged in user
 
