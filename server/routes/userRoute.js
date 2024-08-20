@@ -16,6 +16,6 @@ router.use(isAuthenticated);
 router.get('/my-profile', getMyProfile)
 router.get('/logout', logout)
 router.get('/search', searchUser)
-router.get('/sendrequest',sendRequestValidator(), validateHandler, sendFriendRequest);
+router.put('/sendrequest',sendRequestValidator(), validateHandler, sendFriendRequest);
 
 export default router;

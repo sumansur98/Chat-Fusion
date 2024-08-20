@@ -1,10 +1,11 @@
 import { User } from "../models/userModel.js";
-import { cookieOptions, sendToken } from "../utils/features.js";
+import { cookieOptions, emitEvent, sendToken } from "../utils/features.js";
 import { compare } from "bcrypt";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chatModel.js";
 import { Request } from "../models/requestModel.js";
 import { errorMiddleware } from "../middlewares/error.js";
+import { NEW_REQUEST } from "../constants/events.js";
 
 const newUser = async(req, res) => {
 
@@ -96,7 +97,12 @@ const sendFriendRequest = async (req, res, next) => {
 
     const {userId} = req.body;
 
-    const request = await Request.findOne({});
+    const request = await Request.findOne({
+        $or : [
+            {sender : userId, receiver : req.user_id},
+            {sender : req.user_id, receiver : userId},
+        ]
+    });
 
     if(request) return next(new ErrorHandler('Request already sent', 400));
 
@@ -105,9 +111,11 @@ const sendFriendRequest = async (req, res, next) => {
         receiver : userId
     })
 
+    emitEvent(req, NEW_REQUEST, [userId])
+
     return res.status(200).json({
         success : true,
-        message : 'Logged out successfully'
+        message : 'Request sent successfully'
     })
 }
 
