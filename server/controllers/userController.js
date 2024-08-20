@@ -2,6 +2,9 @@ import { User } from "../models/userModel.js";
 import { cookieOptions, sendToken } from "../utils/features.js";
 import { compare } from "bcrypt";
 import { ErrorHandler } from "../utils/utility.js";
+import { Chat } from "../models/chatModel.js";
+import { Request } from "../models/requestModel.js";
+import { errorMiddleware } from "../middlewares/error.js";
 
 const newUser = async(req, res) => {
 
@@ -60,11 +63,52 @@ const logout = (req, res, next) => {
     })
 }
 
-const searchUser = (req, res, next) => {
-    return res.status(200).cookie('chat-token', "",{...cookieOptions, maxAge : 0}).json({
+const searchUser = async (req, res, next) => {
+   const {name=""} = req.query;
+
+   //find all my chats
+   const chats = await Chat.find({groupChat : false, members : req.user_id});
+
+   //extract all users
+   const allUsers = chats.map( chat => chat.members).flat();
+
+   //all users except me and friends
+   const allUsersExceptMeAndFriends = await User.find({
+    _id : {$nin : allUsers},
+    // name : {$regex : name, $options : 'i'}
+   })
+
+   const users = allUsersExceptMeAndFriends.map(({_id, name, avatar}) => (
+    {
+        _id,
+        name,
+        avatar : avatar.url
+    }
+   ))
+
+   res.status(200).json({
+    success : true,
+    users
+   })
+}
+
+const sendFriendRequest = async (req, res, next) => {
+
+    const {userId} = req.body;
+
+    const request = await Request.findOne({});
+
+    if(request) return next(new ErrorHandler('Request already sent', 400));
+
+    Request.create({
+        sender : req.user_id,
+        receiver : userId
+    })
+
+    return res.status(200).json({
         success : true,
         message : 'Logged out successfully'
     })
 }
 
-export { login, newUser, getMyProfile, logout, searchUser };
+export { login, newUser, getMyProfile, logout, searchUser, sendFriendRequest };

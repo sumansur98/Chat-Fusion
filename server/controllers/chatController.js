@@ -84,10 +84,6 @@ const getMyGroups = async (req, res, next) => {
 
 const addMembers = async (req, res, next) => {
   const { chatId, members } = req.body;
-
-  if (!members || members.length < 1)
-    return next(new ErrorHandler("Please provide atleast one member", 404));
-
   const chat = await Chat.findById(chatId);
 
   if (!chat) return next(new ErrorHandler("Chat not found", 404));
