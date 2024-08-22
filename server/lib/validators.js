@@ -56,4 +56,8 @@ const sendRequestValidator = () => [
     body("userId", "Please enter user id").notEmpty(),
 ]
 
-export { registerValidator, validateHandler, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, leaveGroupValidator, sendAttachmentsValidator, getMessagesValidator, sendRequestValidator }
+const acceptRequestValidator = () => [
+    body("requestId", "Please enter request id").notEmpty(),
+]
+
+export { registerValidator, validateHandler, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, leaveGroupValidator, sendAttachmentsValidator, getMessagesValidator, sendRequestValidator, acceptRequestValidator }
