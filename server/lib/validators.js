@@ -60,4 +60,8 @@ const acceptRequestValidator = () => [
     body("requestId", "Please enter request id").notEmpty(),
 ]
 
-export { registerValidator, validateHandler, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, leaveGroupValidator, sendAttachmentsValidator, getMessagesValidator, sendRequestValidator, acceptRequestValidator }
+const adminLoginValidator = () => [
+    body("secretKey", "Please Enter Secret Key").notEmpty(),
+  ];
+
+export { registerValidator, validateHandler, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, leaveGroupValidator, sendAttachmentsValidator, getMessagesValidator, sendRequestValidator, acceptRequestValidator, adminLoginValidator }

@@ -171,6 +171,45 @@ const getAllNotifications = async (req, res, next) => {
         allRequests
     })
 }
+
+const getMyFriends = async (req, res) => {
+    const chatId = req.query.chatId;
+  
+    const chats = await Chat.find({
+      members: req.user,
+      groupChat: false,
+    }).populate("members", "name avatar");
+  
+    const friends = chats.map(({ members }) => {
+      const otherUser = getOtherMember(members, req.user);
+  
+      return {
+        _id: otherUser._id,
+        name: otherUser.name,
+        avatar: otherUser.avatar.url,
+      };
+    });
+  
+    if (chatId) {
+      const chat = await Chat.findById(chatId);
+  
+      const availableFriends = friends.filter(
+        (friend) => !chat.members.includes(friend._id)
+      );
+  
+      return res.status(200).json({
+        success: true,
+        friends: availableFriends,
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        friends,
+      });
+    }
+  };
+
+
 export {
   login,
   newUser,
@@ -179,5 +218,6 @@ export {
   searchUser,
   sendFriendRequest,
   acceptFriendRequest,
-  getAllNotifications
+  getAllNotifications,
+  getMyFriends
 };

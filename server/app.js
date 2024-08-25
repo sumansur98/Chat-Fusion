@@ -1,6 +1,7 @@
 import express from "express";
 import userRouter from './routes/userRoute.js'
 import chatRoute from "./routes/chatRoute.js";
+import adminRoute from "./routes/adminRoute.js";
 import { connectDB } from "./utils/features.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -12,6 +13,7 @@ dotenv.config({path : './.env'})
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3000
+const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
 
 connectDB(mongoURI)
 
@@ -27,6 +29,7 @@ app.use(cookieParser())
 
 app.use('/user', userRouter);
 app.use('/chat', chatRoute)
+app.use('/admin', adminRoute)
 
 app.get('/', (req, res) => {
     res.send('hello')
@@ -37,3 +40,5 @@ app.use(errorMiddleware)
 app.listen(port, ()=>{
     console.log('server listening port ' + port)
 })
+
+export { adminSecretKey };
