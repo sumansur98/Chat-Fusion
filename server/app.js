@@ -13,8 +13,10 @@ import { createServer } from "http";
 import { NEW_MESSAGE } from "./constants/events.js";
 import { getSockets } from "./lib/helpe.js";
 import { Message } from "./models/messageModel.js";
+import cors from 'cors'
 
 dotenv.config({ path: './.env' })
+
 
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3000
@@ -28,6 +30,8 @@ connectDB(mongoURI)
 //createMessagesInAChat('66a7b44e1c7df571fc0fa0aa', 50)
 
 const app = express();
+
+app.use(cors())
 const server = createServer(app);
 const io = new Server(server, {
 
@@ -37,9 +41,9 @@ app.use(express.json())
 app.use(cookieParser())
 
 
-app.use('/user', userRouter);
-app.use('/chat', chatRoute)
-app.use('/admin', adminRoute)
+app.use('api/v1/user', userRouter);
+app.use('api/v1chat', chatRoute)
+app.use('api/v1/admin', adminRoute)
 
 app.get('/', (req, res) => {
     res.send('hello')
