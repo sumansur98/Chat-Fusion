@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import { ErrorHandler } from "../utils/utility.js";
 import { adminSecretKey } from "../app.js";
+import { TryCatch } from "./error.js";
 
 
-const isAuthenticated = (req, res, next) => {
+const isAuthenticated = TryCatch( (req, res, next) => {
     //console.log('cookies',req.cookies);
+    console.log('is authentication middleware')
 
     const token = req.cookies['chat-token'];
 
@@ -17,9 +19,9 @@ const isAuthenticated = (req, res, next) => {
     req.user_id = decoded._id;
 
     next();
-}
+})
 
-const adminOnly = (req, res, next) => {
+const adminOnly = TryCatch( (req, res, next) => {
     const token = req.cookies["chat-admin-token"];
   
     if (!token)
@@ -33,6 +35,6 @@ const adminOnly = (req, res, next) => {
       return next(new ErrorHandler("Only Admin can access this route", 401));
   
     next();
-  };
+  });
 
 export {isAuthenticated, adminOnly};

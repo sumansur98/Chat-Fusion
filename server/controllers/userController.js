@@ -4,7 +4,7 @@ import { compare } from "bcrypt";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chatModel.js";
 import { Request } from "../models/requestModel.js";
-import { errorMiddleware } from "../middlewares/error.js";
+import { errorMiddleware, TryCatch } from "../middlewares/error.js";
 import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
 
 const newUser = async (req, res) => {
@@ -44,14 +44,15 @@ const login = async (req, res, next) => {
   sendToken(res, user, 200, "User logged in " + user.name);
 };
 
-const getMyProfile = async (req, res) => {
+const getMyProfile = TryCatch( async (req, res) => {
+  console.log('get my profile api');  
   const user = await User.findById(req.user_id);
 
   res.status(200).json({
     succcess: true,
     user,
   });
-};
+});
 
 const logout = (req, res, next) => {
   return res

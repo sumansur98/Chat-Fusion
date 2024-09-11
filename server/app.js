@@ -31,7 +31,10 @@ connectDB(mongoURI)
 
 const app = express();
 
-app.use(cors())
+app.use(cors({
+    credentials : true,
+    origin : ['http://localhost:5173','http://localhost:4173', process.env.CLIENT_URL]
+}))
 const server = createServer(app);
 const io = new Server(server, {
 
@@ -41,11 +44,12 @@ app.use(express.json())
 app.use(cookieParser())
 
 
-app.use('api/v1/user', userRouter);
-app.use('api/v1chat', chatRoute)
-app.use('api/v1/admin', adminRoute)
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/chat', chatRoute)
+app.use('/api/v1/admin', adminRoute)
 
 app.get('/', (req, res) => {
+    console.log('hello')
     res.send('hello')
 })
 

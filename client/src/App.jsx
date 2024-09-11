@@ -1,7 +1,9 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectRoute from "./components/auth/ProtectRoute";
 import LayoutLoaders from "./components/layouts/Loaders";
+import axios from "axios";
+import { server } from "./constants/config";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -19,6 +21,13 @@ const MessageManagement = lazy(()=>import("./pages/admin/MessageManagement"))
 let user = true;
 
 const App = () => {
+
+  useEffect(()=>{
+    console.log(server);
+    axios.get(`${server}/api/v1/user/me`).then((res) => console.log(res))
+    .catch(err => console.log(err));
+  },[])
+
   return (
     <BrowserRouter>
       <Suspense fallback={<LayoutLoaders/>}>
