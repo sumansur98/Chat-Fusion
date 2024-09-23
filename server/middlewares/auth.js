@@ -6,7 +6,7 @@ import { TryCatch } from "./error.js";
 
 const isAuthenticated = TryCatch( (req, res, next) => {
     //console.log('cookies',req.cookies);
-    console.log('is authentication middleware')
+   // console.log('is authentication middleware')
 
     const token = req.cookies['chat-token'];
 

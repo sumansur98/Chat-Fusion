@@ -11,6 +11,11 @@ import {
 } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
+import axios from "axios";
+import { server } from "../constants/config";
+import { useDispatch } from "react-redux";
+import { userExists } from "../redux/reducers/auth";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,11 +29,31 @@ const Login = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e)=>{
+  const dispatch = useDispatch()
+
+  const handleLogin = async (e) => {
     e.preventDefault();
+    try {
+      const { data } = await axios.post(`${server}/api/v1/user/login`, {
+        username: userName,
+        password: password
+      }, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+      )
+
+      dispatch(userExists(true));
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+
   }
 
-  const handleSignUp = (e)=>{
+  const handleSignUp = (e) => {
     e.preventDefault();
   }
 

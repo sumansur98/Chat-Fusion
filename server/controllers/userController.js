@@ -29,20 +29,21 @@ const newUser = async (req, res) => {
 
   //res.status(201).json({message : 'user created successfully'})
 };
-const login = async (req, res, next) => {
+const login = TryCatch(async (req, res, next) => {
+  console.log('in login')
   const { username, password } = req.body;
 
   const user = await User.findOne({ username: username }).select("+password");
   //    console.log(user);
 
-  if (!user) return next(new ErrorHandler("Invalid Username", 404));
+  if (!user) return next(new ErrorHandler("Invalid Username", 400));
 
   const isMatch = await compare(password, user.password);
 
-  if (!isMatch) return next(new ErrorHandler("Invalid Password", 404));
+  if (!isMatch) return next(new ErrorHandler("Invalid Password", 400));
 
   sendToken(res, user, 200, "User logged in " + user.name);
-};
+});
 
 const getMyProfile = TryCatch( async (req, res) => {
   console.log('get my profile api');  
