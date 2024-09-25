@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -53,8 +53,31 @@ const Login = () => {
 
   }
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name',name)
+    formData.append('bio',bio)
+    formData.append('userName',userName)
+    formData.append('password',password)
+
+    try {
+      const {data} = axios.post(`${server}/api/v1/user/new`,
+        formData,
+        {
+          withCredentials : true,
+          headers : {
+            'Content-Type' : 'multipart/form-data'
+          }
+        }
+      )
+
+      dispatch(userExists(true));
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
   }
 
   return (
