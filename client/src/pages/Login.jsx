@@ -59,7 +59,7 @@ const Login = () => {
     const formData = new FormData();
     formData.append('name',name)
     formData.append('bio',bio)
-    formData.append('userName',userName)
+    formData.append('username',userName)
     formData.append('password',password)
 
     try {

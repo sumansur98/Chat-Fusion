@@ -14,6 +14,7 @@ import { NEW_MESSAGE } from "./constants/events.js";
 import { getSockets } from "./lib/helpe.js";
 import { Message } from "./models/messageModel.js";
 import cors from 'cors'
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config({ path: './.env' })
 
@@ -24,6 +25,11 @@ const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
 const userSocketIDs = new Map();
 
 connectDB(mongoURI)
+cloudinary.config({
+    cloud_name : process.env.CLOUDINARY_CLOUD_NAME,
+    api_key : process.env.CLOUDINARY_API_KEY,
+    api_secret : process.env.CLOUDINARY_API_SECRET,
+})
 
 // createSingleChats(10);
 // createGroupChats(10);
