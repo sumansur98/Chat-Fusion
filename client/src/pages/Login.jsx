@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  
 
   const toggleLogin = () => {
     setIsLogin((prev) => (prev = !prev));
@@ -28,8 +29,19 @@ const Login = () => {
   const [bio, setBio] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(file);
+      const imageUrl = URL.createObjectURL(file);
+      setAvatarPreview(imageUrl);
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -61,6 +73,9 @@ const Login = () => {
     formData.append('bio',bio)
     formData.append('username',userName)
     formData.append('password',password)
+    formData.append('avatar',avatar);
+
+    console.log("signup form data", formData.values());
 
     try {
       const {data} = axios.post(`${server}/api/v1/user/new`,
@@ -163,6 +178,7 @@ const Login = () => {
               >
                 <Stack position={"relative"} margin={"auto"} width={"10rem"}>
                   <Avatar
+                  src={avatarPreview}
                     sx={{
                       width: "10rem",
                       height: "10rem",
@@ -183,7 +199,10 @@ const Login = () => {
                     component={"label"}
                   >
                     <CameraAltIcon></CameraAltIcon>
-                    <VisuallyHiddenInput type="file" />
+                    <VisuallyHiddenInput
+                      type="file"
+                      onChange={handleImageChange}
+                    />
                   </IconButton>
                 </Stack>
 

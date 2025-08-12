@@ -6,15 +6,20 @@ import { Chat } from "../models/chatModel.js";
 import { Request } from "../models/requestModel.js";
 import { errorMiddleware, TryCatch } from "../middlewares/error.js";
 import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
+import {uploadFilesToCloudinary} from '../utils/features.js';
 
-const newUser = async (req, res) => {
+const newUser = TryCatch( async (req, res) => {
   const { name, username, password, bio } = req.body;
+  const file = req.file;
 
-  console.log(req.body);
+  console.log("new user api", req.body, file);
+  if(!file) return next(new ErrorHandler("Please upload an avatar"));
 
+  const results = await uploadFilesToCloudinary([file]);
+  console.log("results from cloudinary", results);
   const avatar = {
-    public_id: "sfafs",
-    url: "adsfsdaf",
+    public_id: results[0].public_id,
+    url: results[0].url,
   };
   const user = await User.create({
     name,
@@ -28,7 +33,9 @@ const newUser = async (req, res) => {
   sendToken(res, user, 201, "user created");
 
   //res.status(201).json({message : 'user created successfully'})
-};
+});
+
+
 const login = TryCatch(async (req, res, next) => {
   console.log('in login')
   const { username, password } = req.body;
@@ -48,7 +55,7 @@ const login = TryCatch(async (req, res, next) => {
 });
 
 const getMyProfile = TryCatch( async (req, res) => {
-  console.log('get my profile api');  
+  // console.log('get my profile api');  
   const user = await User.findById(req.user_id);
 
   res.status(200).json({
@@ -69,17 +76,20 @@ const logout = (req, res, next) => {
 
 const searchUser = async (req, res, next) => {
   const { name = "" } = req.query;
+  console.log('received name', name)
 
   //find all my chats
   const chats = await Chat.find({ groupChat: false, members: req.user_id });
+  console.log('all chats', chats)
 
   //extract all users
   const allUsers = chats.map((chat) => chat.members).flat();
+  console.log('all users', allUsers)
 
   //all users except me and friends
   const allUsersExceptMeAndFriends = await User.find({
     _id: { $nin: allUsers },
-    // name : {$regex : name, $options : 'i'}
+    name : {$regex : name, $options : 'i'}
   });
 
   const users = allUsersExceptMeAndFriends.map(({ _id, name, avatar }) => ({
