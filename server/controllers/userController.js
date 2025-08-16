@@ -129,15 +129,20 @@ const sendFriendRequest = async (req, res, next) => {
   });
 };
 
-const acceptFriendRequest = async (req, res, next) => {
+const acceptFriendRequest = TryCatch( async (req, res, next) => {
   const { requestId, accept } = req.body;
+
+  console.log("accept request hit with ",requestId, accept);
 
   const request = await Request.findById(requestId)
     .populate("sender", "name")
     .populate("receiver", "name");
 
+    console.log("request found", request);
+    console.log(request.receiver._id.toString(), req.user_id.toString());
+
   if (!request) return next(new ErrorHandler("No request found", 404));
-  if (request.receiver._id.toString !== req.user_id.toString())
+  if (request.receiver._id.toString() !== req.user_id.toString())
     return next(new ErrorHandler("Unauthorized", 401));
 
   if (!accept) {
@@ -166,7 +171,7 @@ const acceptFriendRequest = async (req, res, next) => {
     senderId : request.sender._id,
   })
 
-};
+});
 
 const getAllNotifications = async (req, res, next) => {
     const requests = await Request.find({receiver : req.user_id}).populate('sender', 'name avatar')
